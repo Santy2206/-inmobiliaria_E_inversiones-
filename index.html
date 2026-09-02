@@ -11,18 +11,19 @@
   <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&amp;family=Manrope:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
   <link href="assets/css/main.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
  </head>
  <body>
   <header>
    <div class="container nav">
     <a class="brand" href="#inicio">
      <span class="brand-mark">
-      +
+      e
      </span>
      <span>
       La Gran Solución
       <small>
-       Inmobiliaria &amp; Inversiones
+       Inmobiliaria e Inversiones
       </small>
      </span>
     </a>
@@ -77,18 +78,37 @@
       <img alt="Edificio emblemático" class="hero-photo" src="assets/img/hero.jpg"/>
       <div class="visual-frame">
       </div>
-      <div class="hero-stat">
-       <span class="stat-icon">
-        ↗
-       </span>
-       <span>
-        <strong>
-         100%
-        </strong>
-        <span>
-         Compromiso y respaldo
+      <div class="hero-badges">
+       <div class="hero-stat">
+        <span class="stat-icon">
+         <i aria-hidden="true" class="material-icons">
+          trending_up
+         </i>
         </span>
-       </span>
+        <span>
+         <strong data-count="150" data-prefix="+">
+          0
+         </strong>
+         <span>
+          clientes atendidos este a&ntilde;o
+         </span>
+        </span>
+       </div>
+       <div class="hero-stat">
+        <span class="stat-icon">
+         <i aria-hidden="true" class="material-icons">
+          schedule
+         </i>
+        </span>
+        <span>
+         <strong data-count="24" data-suffix="h">
+          0
+         </strong>
+         <span>
+          tiempo de respuesta
+         </span>
+        </span>
+       </div>
       </div>
      </div>
     </div>
@@ -111,29 +131,35 @@
      <div class="service-grid">
       <article class="service-card">
        <div class="service-icon">
-        ⌂
+        <i aria-hidden="true" class="material-icons">
+         directions_car
+        </i>
        </div>
        <h3>
-        Préstamos con garantía
+        Pacto de retroventa y préstamos sobre vehículos
        </h3>
        <p>
-        Hipotecaria, pacto de retroventa y por vehículos en las principales ciudades.
+        Pacto de retroventa y préstamos con garantía sobre vehículos recientes.
        </p>
       </article>
       <article class="service-card">
        <div class="service-icon">
-        ◇
+        <i aria-hidden="true" class="material-icons">
+         home
+        </i>
        </div>
        <h3>
         Compra de inmuebles
        </h3>
        <p>
-        Te acompañamos en la compra segura de inmuebles embargados.
+        Te acompañamos en la compra segura de inmuebles libres de embargos.
        </p>
       </article>
       <article class="service-card">
        <div class="service-icon">
-        ▱
+        <i aria-hidden="true" class="material-icons">
+         swap_horiz
+        </i>
        </div>
        <h3>
         Venta y permuta
@@ -144,7 +170,9 @@
       </article>
       <article class="service-card">
        <div class="service-icon">
-        %
+        <i aria-hidden="true" class="material-icons">
+         trending_up
+        </i>
        </div>
        <h3>
         Dinero a rentar
@@ -155,7 +183,9 @@
       </article>
       <article class="service-card">
        <div class="service-icon">
-        ⌖
+        <i aria-hidden="true" class="material-icons">
+         assignment
+        </i>
        </div>
        <h3>
         Avalúos nacionales
@@ -166,7 +196,9 @@
       </article>
       <article class="service-card">
        <div class="service-icon">
-        ↔
+        <i aria-hidden="true" class="material-icons">
+         handshake
+        </i>
        </div>
        <h3>
         Consignaciones
@@ -175,13 +207,253 @@
         Gestionamos tu propiedad para conectar con compradores ideales.
        </p>
       </article>
+      <article class="service-card">
+       <div class="service-icon">
+        <i aria-hidden="true" class="material-icons">
+         apartment
+        </i>
+       </div>
+       <h3>
+        Préstamos con garantía hipotecaria
+       </h3>
+       <p>
+        Obtén liquidez con el respaldo de tu propiedad inmueble.
+       </p>
+      </article>
+      <article class="service-card">
+       <div class="service-icon">
+        <i aria-hidden="true" class="material-icons">
+         location_on
+        </i>
+       </div>
+       <h3>
+        Préstamos en ciudades principales
+       </h3>
+       <p>
+        Cobertura en Colombia.
+       </p>
+      </article>
+     </div>
+    </div>
+   </section>
+   <section class="calculator" id="calculadora">
+    <div class="container">
+     <div class="section-head">
+      <div>
+       <span class="eyebrow">
+        Calcula tu rentabilidad
+       </span>
+       <h2>
+        ¿Cuánto podrías ganar invirtiendo?
+       </h2>
+      </div>
+     </div>
+     <div class="calculator-card">
+      <div class="calc-tabs">
+       <label class="calc-tab">
+        <input checked="" name="tipo" type="radio" value="pacto"/>
+        <span>
+         Pacto de retroventa
+        </span>
+       </label>
+       <label class="calc-tab">
+        <input name="tipo" type="radio" value="hipoteca"/>
+        <span>
+         Hipoteca
+        </span>
+       </label>
+      </div>
+      <div class="calc-field">
+       <label for="monto">
+        Monto a invertir
+       </label>
+       <input id="monto" inputmode="numeric" name="monto" placeholder="$50.000.000" type="text"/>
+      </div>
+      <div class="calc-field">
+       <label for="plazo">
+        Plazo:
+        <span id="plazo-val">
+         12
+        </span>
+        meses
+       </label>
+       <input id="plazo" max="36" min="6" name="plazo" step="6" type="range" value="12"/>
+       <div class="calc-marks">
+        <span>
+         6
+        </span>
+        <span>
+         12
+        </span>
+        <span>
+         24
+        </span>
+        <span>
+         36
+        </span>
+       </div>
+      </div>
+      <div class="calc-result">
+       <p>
+        Ganancia mensual aproximada:
+       </p>
+       <span class="calc-amount" id="resultado-mensual">
+        $0
+       </span>
+       <span class="calc-rate" id="tasa-mensual">
+        Tasa del 3% mensual
+       </span>
+       <span class="calc-total" id="resultado-total">
+        $0 en 12 meses
+       </span>
+      </div>
+      <p class="calc-note">
+       *Cálculo estimado con rendimientos mensuales del 3% para pactos y 5% para hipotecas. El valor final depende de la evaluación.
+      </p>
+      <a class="btn btn-primary calc-cta" href="https://wa.me/573144049876" id="calc-cta" rel="noreferrer" target="_blank">
+       Solicita asesoría
+      </a>
+     </div>
+    </div>
+   </section>
+   <section class="proof" id="prueba-social">
+    <div class="container">
+     <div class="section-head">
+      <div>
+       <span class="eyebrow">
+        Confianza respaldada
+       </span>
+       <h2>
+        Cifras que hablan
+       </h2>
+      </div>
+     </div>
+     <div class="proof-grid">
+      <article class="proof-card">
+       <span class="proof-number">
+        +500
+       </span>
+       <span class="proof-label">
+        Clientes asesorados en 15 a&ntilde;os
+       </span>
+      </article>
+      <article class="proof-card">
+       <span class="proof-number">
+        15+
+       </span>
+       <span class="proof-label">
+        Años de experiencia
+       </span>
+      </article>
+      <article class="proof-card">
+       <span class="proof-number">
+        98%
+       </span>
+       <span class="proof-label">
+        Satisfacción de clientes
+       </span>
+      </article>
+     </div>
+    </div>
+   </section>
+   <section class="testimonials" id="testimonios">
+    <div class="container">
+     <div class="section-head">
+      <div>
+       <span class="eyebrow">
+        Testimonios
+       </span>
+       <h2>
+        Lo que dicen nuestros clientes
+       </h2>
+      </div>
+     </div>
+     <div class="testimonial-grid">
+      <article class="testimonial-card">
+       <img alt="Carlos M." class="testimonial-photo" src="https://ui-avatars.com/api/?name=Carlos+M&amp;background=25a9e0&amp;color=fff&amp;size=128"/>
+       <div class="stars">
+        <i aria-hidden="true" class="material-icons">
+         star
+        </i>
+        <i aria-hidden="true" class="material-icons">
+         star
+        </i>
+        <i aria-hidden="true" class="material-icons">
+         star
+        </i>
+        <i aria-hidden="true" class="material-icons">
+         star
+        </i>
+        <i aria-hidden="true" class="material-icons">
+         star
+        </i>
+       </div>
+       <p>
+        "En menos de 48 horas obtuve el préstamo con garantía de mi vehículo. Proceso claro y confiable."
+       </p>
+       <span class="testimonial-author">
+        Carlos M.
+       </span>
+      </article>
+      <article class="testimonial-card">
+       <img alt="Ana L." class="testimonial-photo" src="https://ui-avatars.com/api/?name=Ana+L&amp;background=25a9e0&amp;color=fff&amp;size=128"/>
+       <div class="stars">
+        <i aria-hidden="true" class="material-icons">
+         star
+        </i>
+        <i aria-hidden="true" class="material-icons">
+         star
+        </i>
+        <i aria-hidden="true" class="material-icons">
+         star
+        </i>
+        <i aria-hidden="true" class="material-icons">
+         star
+        </i>
+        <i aria-hidden="true" class="material-icons">
+         star
+        </i>
+       </div>
+       <p>
+        "Me ayudaron a vender mi apartamento rápidamente y a un muy buen precio. Excelente asesoría."
+       </p>
+       <span class="testimonial-author">
+        Ana L.
+       </span>
+      </article>
+      <article class="testimonial-card">
+       <img alt="Luis G." class="testimonial-photo" src="https://ui-avatars.com/api/?name=Luis+G&amp;background=25a9e0&amp;color=fff&amp;size=128"/>
+       <div class="stars">
+        <i aria-hidden="true" class="material-icons">
+         star
+        </i>
+        <i aria-hidden="true" class="material-icons">
+         star
+        </i>
+        <i aria-hidden="true" class="material-icons">
+         star
+        </i>
+        <i aria-hidden="true" class="material-icons">
+         star
+        </i>
+        <i aria-hidden="true" class="material-icons">
+         star
+        </i>
+       </div>
+       <p>
+        "Me sentí respaldado durante todo el proceso de inversión. Gran conocimiento del mercado."
+       </p>
+       <span class="testimonial-author">
+        Luis G.
+       </span>
+      </article>
      </div>
     </div>
    </section>
    <section id="gerencia">
     <div class="container manager-grid">
      <div class="manager-photo-wrap">
-      <img alt="Profesional sonriente en una oficina" class="manager-photo" src="assets/img/manager.jpg"/>
+      <img alt="Miguel Angel Diaz C." class="manager-photo" src="assets/img/manager.jpg"/>
       <div class="manager-accent">
       </div>
      </div>
@@ -207,6 +479,124 @@
      </div>
     </div>
    </section>
+   <section class="faq" id="preguntas">
+    <div class="container">
+     <div class="section-head">
+      <div>
+       <span class="eyebrow">
+        Resolvemos tus dudas
+       </span>
+       <h2>
+        Preguntas frecuentes
+       </h2>
+      </div>
+     </div>
+     <div class="faq-list">
+      <article class="faq-item">
+       <button aria-expanded="false" class="faq-question" type="button">
+        <span>
+         ¿Cuánto tarda en aprobarse el préstamo?
+        </span>
+        <span aria-hidden="true" class="faq-icon">
+         <i class="material-icons">
+          expand_more
+         </i>
+        </span>
+       </button>
+       <div class="faq-answer">
+        <p>
+         En la mayoría de los casos logramos una aprobación en menos de 48 horas, siempre que la documentación esté completa.
+        </p>
+       </div>
+      </article>
+      <article class="faq-item">
+       <button aria-expanded="false" class="faq-question" type="button">
+        <span>
+         ¿Qué documentos necesito para solicitar un préstamo con garantía?
+        </span>
+        <span aria-hidden="true" class="faq-icon">
+         <i class="material-icons">
+          expand_more
+         </i>
+        </span>
+       </button>
+       <div class="faq-answer">
+        <p>
+         Generalmente requerimos: documento de identidad, documento del vehículo o certificado de tradición/libertad del inmueble, y un comprobante de ingresos o capacidad de pago. Tu asesor te indicará exactamente lo que necesitas según tu caso.
+        </p>
+       </div>
+      </article>
+      <article class="faq-item">
+       <button aria-expanded="false" class="faq-question" type="button">
+        <span>
+         ¿Atienden clientes fuera de Colombia?
+        </span>
+        <span aria-hidden="true" class="faq-icon">
+         <i class="material-icons">
+          expand_more
+         </i>
+        </span>
+       </button>
+       <div class="faq-answer">
+        <p>
+         Sí. Trabajamos con clientes en el extranjero. El proceso se puede adelantar a distancia con el acompañamiento de tu asesor y la documentación digital.
+        </p>
+       </div>
+      </article>
+      <article class="faq-item">
+       <button aria-expanded="false" class="faq-question" type="button">
+        <span>
+         ¿Qué pasa si mi inmueble está embargado?
+        </span>
+        <span aria-hidden="true" class="faq-icon">
+         <i class="material-icons">
+          expand_more
+         </i>
+        </span>
+       </button>
+       <div class="faq-answer">
+        <p>
+         Compramos inmuebles embargados para dar una salida rápida a quienes enfrentan este tipo de situaciones. Evaluamos cada caso de forma personalizada.
+        </p>
+       </div>
+      </article>
+      <article class="faq-item">
+       <button aria-expanded="false" class="faq-question" type="button">
+        <span>
+         ¿Los intereses son fijos o negociables?
+        </span>
+        <span aria-hidden="true" class="faq-icon">
+         <i class="material-icons">
+          expand_more
+         </i>
+        </span>
+       </button>
+       <div class="faq-answer">
+        <p>
+         Ofrecemos intereses justos y acuerdos transparentes. Las condiciones se ajustan al tipo de operación y se definen claramente antes de firmar.
+        </p>
+       </div>
+      </article>
+      <article class="faq-item">
+       <button aria-expanded="false" class="faq-question" type="button">
+        <span>
+         ¿Cómo empiezo el proceso?
+        </span>
+        <span aria-hidden="true" class="faq-icon">
+         <i class="material-icons">
+          expand_more
+         </i>
+        </span>
+       </button>
+       <div class="faq-answer">
+        <p>
+         Solo debes escribirnos por WhatsApp o completar el formulario de contacto. Un asesor te responderá de inmediato para acompañarte de forma personalizada.
+        </p>
+       </div>
+      </article>
+     </div>
+    </div>
+   </section>
    <section class="contact" id="contacto">
     <div class="container contact-grid">
      <div class="contact-copy">
@@ -226,52 +616,149 @@
        <a href="mailto:miguelangeldiazcastillo26@gmail.com">
         miguelangeldiazcastillo26@gmail.com
        </a>
+       <a href="tel:3144049876">
+        314 404 9876
+       </a>
+       <a href="tel:3114662234">
+        311 466 2234
+       </a>
       </div>
      </div>
      <form id="lead-form">
-      <label>
-       Nombre
-       <input name="name" placeholder="Tu nombre completo" required=""/>
-      </label>
-      <label>
-       Teléfono
-       <input name="phone" placeholder="300 000 0000" required="" type="tel"/>
-      </label>
-      <label>
-       Correo
-       <input name="email" placeholder="tu@correo.com" required="" type="email"/>
-      </label>
-      <label>
-       Servicio de interés
-       <select name="service">
-        <option>
-         Selecciona una opción
-        </option>
-        <option>
-         Préstamo
-        </option>
-        <option>
-         Compra o venta
-        </option>
-        <option>
-         Inversión
-        </option>
-        <option>
-         Avalúo
-        </option>
-       </select>
-      </label>
-      <label class="full">
-       Mensaje
-       <textarea name="message" placeholder="¿Cómo podemos ayudarte?"></textarea>
-      </label>
-      <button class="btn btn-primary" type="submit">
-       Enviar solicitud ↗
-      </button>
-      <span class="form-message" id="form-message">
-       ¡Gracias! Te contactaremos muy pronto.
-      </span>
+      <div class="form-progress">
+       <div class="form-step-indicators">
+        <span class="step-dot active" data-step="1">
+         1
+        </span>
+        <span class="step-dot" data-step="2">
+         2
+        </span>
+       </div>
+       <span class="step-label">
+        Paso 1 de 2
+       </span>
+      </div>
+      <div class="form-steps" id="form-steps">
+       <div class="form-step active" data-step="1">
+        <h3 class="step-title">
+         Cuéntanos sobre ti
+        </h3>
+        <label>
+         Nombre
+         <input id="form-name" name="name" placeholder="Tu nombre completo" required="" type="text"/>
+         <span class="form-error" id="error-name">
+         </span>
+        </label>
+        <label>
+         Teléfono
+         <input id="form-phone" inputmode="tel" name="phone" placeholder="300 000 0000" required="" type="tel"/>
+         <span class="form-error" id="error-phone">
+         </span>
+        </label>
+        <div class="form-actions">
+         <button class="btn btn-primary" id="next-step" type="button">
+          Siguiente
+         </button>
+        </div>
+       </div>
+       <div class="form-step" data-step="2">
+        <h3 class="step-title">
+         ¿En qué te ayudamos?
+        </h3>
+        <label>
+         Correo
+         <input id="form-email" name="email" placeholder="tu@correo.com" required="" type="email"/>
+         <span class="form-error" id="error-email">
+         </span>
+        </label>
+        <label>
+         Servicio de interés
+         <select id="form-service" name="service">
+          <option value="">
+           Selecciona una opción
+          </option>
+          <option value="prestamo">
+           Préstamo
+          </option>
+          <option value="compra-venta">
+           Compra o venta
+          </option>
+          <option value="inversion">
+           Inversión
+          </option>
+          <option value="avaluo">
+           Avalúo
+          </option>
+          <option value="otro">
+           Otro
+          </option>
+         </select>
+         <span class="form-error" id="error-service">
+         </span>
+        </label>
+        <label class="full">
+         Mensaje
+         <textarea id="form-message" name="message" placeholder="¿Cómo podemos ayudarte?"></textarea>
+        </label>
+        <div class="form-actions">
+         <button class="btn btn-light" id="prev-step" type="button">
+          Atrás
+         </button>
+         <button class="btn btn-primary" type="submit">
+          Enviar solicitud ↗
+         </button>
+        </div>
+       </div>
+      </div>
+      <div class="form-success" id="form-success">
+       <h3>
+        ¡Gracias!
+       </h3>
+       <p>
+        Un asesor te contactará pronto.
+       </p>
+      </div>
      </form>
+    </div>
+   </section>
+   <section class="social" id="redes">
+    <div class="container">
+     <div class="section-head">
+      <div>
+       <span class="eyebrow">
+        Síguenos
+       </span>
+       <h2>
+        Nuestras redes sociales
+       </h2>
+      </div>
+     </div>
+     <div class="social-grid">
+      <a aria-label="Facebook" class="social-card" href="#">
+       <span class="social-badge">
+        f
+       </span>
+       <span>
+        Facebook
+       </span>
+      </a>
+      <a aria-label="Instagram" class="social-card" href="#">
+       <span class="social-badge">
+        ig
+       </span>
+       <span>
+        Instagram
+       </span>
+      </a>
+      <a aria-label="LinkedIn" class="social-card" href="#">
+       <span class="social-badge">
+        in
+       </span>
+       <span>
+        LinkedIn
+       </span>
+      </a>
+     </div>
     </div>
    </section>
   </main>
@@ -281,17 +768,26 @@
      <div>
       <a class="brand" href="#inicio">
        <span class="brand-mark">
-        +
+        e
        </span>
        <span>
         La Gran Solución
         <small>
-         Inmobiliaria &amp; Inversiones
+         Inmobiliaria e Inversiones
         </small>
        </span>
       </a>
       <p class="footer-email">
        miguelangeldiazcastillo26@gmail.com
+      </p>
+      <p class="footer-phones">
+       <a href="tel:3144049876">
+        314 404 9876
+       </a>
+       /
+       <a href="tel:3114662234">
+        311 466 2234
+       </a>
       </p>
      </div>
      <div aria-label="Redes sociales" class="socials">
@@ -313,5 +809,8 @@
   </footer>
   <script src="assets/js/main.js">
   </script>
+  <a aria-label="Chatea por WhatsApp" class="whatsapp-float" href="https://wa.me/573144049876?text=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20sus%20servicios%20de%20La%20Gran%20Soluci%C3%B3n." rel="noreferrer" target="_blank">
+   <img alt="WhatsApp" class="whatsapp-icon" src="assets/img/whatsapp.svg"/>
+  </a>
  </body>
 </html>
