@@ -85,13 +85,26 @@ document.addEventListener('DOMContentLoaded', function() {
       }
 
       if (ok) {
-        if (stepsTrack) stepsTrack.style.display = 'none';
-        var progress = document.querySelector('.form-progress');
-        if (progress) progress.style.display = 'none';
-        if (success) {
-          success.style.display = 'block';
-        }
-        form.reset();
+        var submitBtn = form.querySelector('button[type="submit"]');
+        if (submitBtn) submitBtn.disabled = true;
+
+        fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { 'Accept': 'application/json' }
+        }).then(function() {
+          if (stepsTrack) stepsTrack.style.display = 'none';
+          var progress = document.querySelector('.form-progress');
+          if (progress) progress.style.display = 'none';
+          if (success) {
+            success.style.display = 'block';
+          }
+          form.reset();
+        }).catch(function() {
+          showError('#error-email', 'Hubo un problema al enviar. Intenta de nuevo o escríbenos por WhatsApp.');
+        }).finally(function() {
+          if (submitBtn) submitBtn.disabled = false;
+        });
       }
     });
   }
