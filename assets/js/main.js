@@ -88,11 +88,20 @@ document.addEventListener('DOMContentLoaded', function() {
         var submitBtn = form.querySelector('button[type="submit"]');
         if (submitBtn) submitBtn.disabled = true;
 
-        fetch(form.action, {
+        var payload = {};
+        new FormData(form).forEach(function(value, key) {
+          payload[key] = value;
+        });
+
+        fetch('https://formsubmit.co/ajax/soporte@inmobiliariamadc.com', {
           method: 'POST',
-          body: new FormData(form),
-          headers: { 'Accept': 'application/json' }
-        }).then(function() {
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        }).then(function(response) {
+          if (!response.ok) throw new Error('bad response');
           if (stepsTrack) stepsTrack.style.display = 'none';
           var progress = document.querySelector('.form-progress');
           if (progress) progress.style.display = 'none';
