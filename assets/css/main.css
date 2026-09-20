@@ -395,6 +395,11 @@ section
   color:var(--dark);
   font-weight:700
 }
+.contact-address
+{
+  color:var(--dark);
+  font-weight:700
+}
 form
 {
   background:#fff;
@@ -776,6 +781,12 @@ footer .brand small
 .footer-phones a:hover
 {
   color: #fff
+}
+.footer-address
+{
+  color: #a9bac6;
+  font-size: .9rem;
+  margin-top: 4px
 }
 .whatsapp-float
 {

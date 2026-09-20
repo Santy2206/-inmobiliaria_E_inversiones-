@@ -164,7 +164,7 @@ function calcular() {
 
   var mensaje = 'Hola, quiero información para invertir en ' + (tipo === 'pacto' ? 'pacto de retroventa' : 'hipoteca') +
     '. Monto: ' + formatInput(montoInput.value) + ', plazo: ' + plazo + ' meses. Ganancia mensual estimada: ' + (monto > 0 ? formatter.format(mensual) : '$0') + '.';
-  cta.href = 'https://wa.me/573144049876?text=' + encodeURIComponent(mensaje);
+  cta.href = 'https://wa.me/573114662234?text=' + encodeURIComponent(mensaje);
 }
 
 if (montoInput && plazoInput) {
