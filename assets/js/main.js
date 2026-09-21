@@ -13,6 +13,15 @@ document.addEventListener('DOMContentLoaded', function() {
   var phoneInput = document.querySelector('#form-phone');
   var emailInput = document.querySelector('#form-email');
   var serviceInput = document.querySelector('#form-service');
+  var messageInput = document.querySelector('#form-message');
+
+  var SERVICIOS = {
+    prestamo: 'Préstamo',
+    'compra-venta': 'Compra o venta',
+    inversion: 'Inversión',
+    avaluo: 'Avalúo',
+    otro: 'Otro'
+  };
 
   function setStep(n) {
     steps.forEach(function(step) {
@@ -88,10 +97,22 @@ document.addEventListener('DOMContentLoaded', function() {
         var submitBtn = form.querySelector('button[type="submit"]');
         if (submitBtn) submitBtn.disabled = true;
 
-        var payload = {};
-        new FormData(form).forEach(function(value, key) {
-          payload[key] = value;
-        });
+        var nombre = (nameInput.value || '').trim();
+        var digitosTelefono = (phoneInput.value || '').replace(/\D/g, '');
+        if (digitosTelefono.length === 10) digitosTelefono = '57' + digitosTelefono;
+        var whatsappLink = 'https://wa.me/' + digitosTelefono;
+
+        var payload = {
+          'Nombre': nombre,
+          'Teléfono': phoneInput.value,
+          'Correo': emailInput.value,
+          'Servicio de interés': SERVICIOS[serviceInput.value] || serviceInput.value,
+          'Mensaje': (messageInput.value || '').trim() || 'Sin mensaje',
+          'Escribir por WhatsApp': whatsappLink,
+          '_subject': 'Nuevo contacto de ' + nombre + ' - Inmobiliaria MADC',
+          '_captcha': 'false',
+          '_template': 'table'
+        };
 
         fetch('https://formsubmit.co/ajax/soporte@inmobiliariamadc.com', {
           method: 'POST',
