@@ -1,12 +1,16 @@
 // Formulario multi-paso
 document.addEventListener('DOMContentLoaded', function() {
   var form = document.querySelector('#lead-form');
+  if (!form) return;
+
   var stepsTrack = document.querySelector('#form-steps');
   var steps = document.querySelectorAll('.form-step');
   var stepDots = document.querySelectorAll('.step-dot');
   var stepLabel = document.querySelector('.step-label');
+  var progress = document.querySelector('.form-progress');
   var nextBtn = document.querySelector('#next-step');
   var prevBtn = document.querySelector('#prev-step');
+  var submitBtn = document.querySelector('#submit-lead');
   var success = document.querySelector('#form-success');
 
   var nameInput = document.querySelector('#form-name');
@@ -23,6 +27,8 @@ document.addEventListener('DOMContentLoaded', function() {
     otro: 'Otro'
   };
 
+  var submitDefaultLabel = submitBtn ? submitBtn.textContent : 'Enviar solicitud ↗';
+
   function setStep(n) {
     steps.forEach(function(step) {
       var stepNumber = parseInt(step.getAttribute('data-step'), 10);
@@ -32,7 +38,12 @@ document.addEventListener('DOMContentLoaded', function() {
       dot.classList.toggle('active', parseInt(dot.getAttribute('data-step'), 10) === n);
     });
     if (stepLabel) stepLabel.textContent = 'Paso ' + n + ' de 2';
-    if (success) success.style.display = 'none';
+    if (success) {
+      success.classList.remove('is-visible');
+      success.style.display = 'none';
+    }
+    if (stepsTrack) stepsTrack.style.display = '';
+    if (progress) progress.style.display = '';
   }
 
   function showError(id, msg) {
@@ -41,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   function clearErrors() {
-    ['#error-name', '#error-phone', '#error-email', '#error-service'].forEach(function(id) {
+    ['#error-name', '#error-phone', '#error-email', '#error-service', '#error-submit'].forEach(function(id) {
       var el = document.querySelector(id);
       if (el) el.textContent = '';
     });
@@ -54,6 +65,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
   function validateEmail(value) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value || '');
+  }
+
+  function setSubmitting(isSubmitting) {
+    if (!submitBtn) return;
+    submitBtn.disabled = isSubmitting;
+    submitBtn.textContent = isSubmitting ? 'Enviando...' : submitDefaultLabel;
+  }
+
+  function showSuccess() {
+    if (stepsTrack) stepsTrack.style.display = 'none';
+    if (progress) progress.style.display = 'none';
+    if (success) {
+      success.style.display = 'block';
+      success.classList.add('is-visible');
+    }
   }
 
   if (nextBtn) {
@@ -74,70 +100,82 @@ document.addEventListener('DOMContentLoaded', function() {
 
   if (prevBtn) {
     prevBtn.addEventListener('click', function() {
+      clearErrors();
       setStep(1);
     });
   }
 
-  if (form) {
-    form.addEventListener('submit', function(e) {
-      e.preventDefault();
-      clearErrors();
-      var ok = true;
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    clearErrors();
 
-      if (!validateEmail(emailInput.value)) {
-        showError('#error-email', 'Ingresa un correo válido.');
-        ok = false;
-      }
-      if (!(serviceInput.value || '')) {
-        showError('#error-service', 'Selecciona un servicio.');
-        ok = false;
-      }
+    var ok = true;
+    if (!(nameInput.value || '').trim()) {
+      showError('#error-name', 'Ingresa tu nombre.');
+      setStep(1);
+      ok = false;
+    }
+    if (!validatePhone(phoneInput.value)) {
+      showError('#error-phone', 'Ingresa un teléfono válido.');
+      setStep(1);
+      ok = false;
+    }
+    if (!validateEmail(emailInput.value)) {
+      showError('#error-email', 'Ingresa un correo válido.');
+      ok = false;
+    }
+    if (!(serviceInput.value || '')) {
+      showError('#error-service', 'Selecciona un servicio.');
+      ok = false;
+    }
+    if (!ok) return;
 
-      if (ok) {
-        var submitBtn = form.querySelector('button[type="submit"]');
-        if (submitBtn) submitBtn.disabled = true;
+    setSubmitting(true);
 
-        var nombre = (nameInput.value || '').trim();
-        var digitosTelefono = (phoneInput.value || '').replace(/\D/g, '');
-        if (digitosTelefono.length === 10) digitosTelefono = '57' + digitosTelefono;
-        var whatsappLink = 'https://wa.me/' + digitosTelefono;
+    var nombre = (nameInput.value || '').trim();
+    var digitosTelefono = (phoneInput.value || '').replace(/\D/g, '');
+    if (digitosTelefono.length === 10) digitosTelefono = '57' + digitosTelefono;
+    var whatsappLink = digitosTelefono ? 'https://wa.me/' + digitosTelefono : '';
 
-        var payload = {
-          'Nombre': nombre,
-          'Teléfono': phoneInput.value,
-          'Correo': emailInput.value,
-          'Servicio de interés': SERVICIOS[serviceInput.value] || serviceInput.value,
-          'Mensaje': (messageInput.value || '').trim() || 'Sin mensaje',
-          'Escribir por WhatsApp': whatsappLink,
-          '_subject': 'Nuevo contacto de ' + nombre + ' - Inmobiliaria MADC',
-          '_captcha': 'false',
-          '_template': 'table'
-        };
+    var payload = {
+      name: nombre,
+      email: emailInput.value,
+      phone: phoneInput.value,
+      'Nombre': nombre,
+      'Teléfono': phoneInput.value,
+      'Correo': emailInput.value,
+      'Servicio de interés': SERVICIOS[serviceInput.value] || serviceInput.value,
+      'Mensaje': (messageInput.value || '').trim() || 'Sin mensaje',
+      'Escribir por WhatsApp': whatsappLink,
+      _subject: 'Nuevo contacto de ' + nombre + ' - Inmobiliaria MADC',
+      _replyto: emailInput.value,
+      _captcha: 'false',
+      _template: 'table'
+    };
 
-        fetch('https://formsubmit.co/ajax/soporte@inmobiliariamadc.com', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          },
-          body: JSON.stringify(payload)
-        }).then(function(response) {
-          if (!response.ok) throw new Error('bad response');
-          if (stepsTrack) stepsTrack.style.display = 'none';
-          var progress = document.querySelector('.form-progress');
-          if (progress) progress.style.display = 'none';
-          if (success) {
-            success.style.display = 'block';
-          }
-          form.reset();
-        }).catch(function() {
-          showError('#error-email', 'Hubo un problema al enviar. Intenta de nuevo o escríbenos por WhatsApp.');
-        }).finally(function() {
-          if (submitBtn) submitBtn.disabled = false;
-        });
-      }
+    fetch('https://formsubmit.co/ajax/soporte@inmobiliariamadc.com', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    }).then(function(response) {
+      return response.json().catch(function() {
+        return {};
+      }).then(function(data) {
+        if (!response.ok) {
+          throw new Error((data && (data.message || data.error)) || 'bad response');
+        }
+        form.reset();
+        showSuccess();
+      });
+    }).catch(function() {
+      showError('#error-submit', 'Hubo un problema al enviar. Intenta de nuevo o escríbenos por WhatsApp.');
+    }).finally(function() {
+      setSubmitting(false);
     });
-  }
+  });
 });
 
 
@@ -158,12 +196,6 @@ document.querySelectorAll('.faq-question').forEach(function(button){
 });
 
 
-// TODO: confirmar tasas con cliente/gerente antes de producción
-var TASAS = {
-  pacto: 0.03,
-  hipoteca: 0.05
-};
-
 var formatter = new Intl.NumberFormat('es-CO', {
   style: 'currency',
   currency: 'COP',
@@ -173,14 +205,12 @@ var formatter = new Intl.NumberFormat('es-CO', {
 var montoInput = document.querySelector('#monto');
 var plazoInput = document.querySelector('#plazo');
 var plazoVal = document.querySelector('#plazo-val');
+var tasaInput = document.querySelector('#tasa');
+var tasaVal = document.querySelector('#tasa-val');
 var resultadoMensual = document.querySelector('#resultado-mensual');
 var resultadoTotal = document.querySelector('#resultado-total');
 var tasaMensual = document.querySelector('#tasa-mensual');
 var cta = document.querySelector('#calc-cta');
-
-function getTipo() {
-  return document.querySelector('input[name="tipo"]:checked').value;
-}
 
 function parseMonto() {
   var raw = (montoInput.value || '').replace(/\D/g, '');
@@ -193,24 +223,25 @@ function formatInput(raw) {
 }
 
 function calcular() {
-  var tipo = getTipo();
   var monto = parseMonto();
   var plazo = parseInt(plazoInput.value, 10);
-  var tasa = TASAS[tipo];
-  var mensual = monto > 0 ? Math.round(monto * tasa) : 0;
+  var tasaPct = parseFloat(tasaInput.value);
+  var mensual = monto > 0 ? Math.round(monto * tasaPct / 100) : 0;
   var total = mensual * plazo;
 
   plazoVal.textContent = plazo;
-  tasaMensual.textContent = 'Tasa del ' + (tasa * 100) + '% mensual';
+  tasaVal.textContent = tasaPct.toLocaleString('es-CO');
+  tasaMensual.textContent = 'Tasa del ' + tasaPct.toLocaleString('es-CO') + '% mensual';
   resultadoMensual.textContent = formatter.format(mensual);
   resultadoTotal.textContent = formatter.format(total) + ' en ' + plazo + ' meses';
 
-  var mensaje = 'Hola, quiero información para invertir en ' + (tipo === 'pacto' ? 'pacto de retroventa' : 'hipoteca') +
-    '. Monto: ' + formatInput(montoInput.value) + ', plazo: ' + plazo + ' meses. Ganancia mensual estimada: ' + (monto > 0 ? formatter.format(mensual) : '$0') + '.';
+  var mensaje = 'Hola, quiero información para invertir. Monto: ' + formatInput(montoInput.value) +
+    ', plazo: ' + plazo + ' meses, tasa: ' + tasaPct + '% mensual. Ganancia mensual estimada: ' +
+    (monto > 0 ? formatter.format(mensual) : '$0') + '.';
   cta.href = 'https://wa.me/573114662234?text=' + encodeURIComponent(mensaje);
 }
 
-if (montoInput && plazoInput) {
+if (montoInput && plazoInput && tasaInput) {
   montoInput.addEventListener('input', function(e) {
     var raw = (e.target.value || '').replace(/\D/g, '');
     e.target.value = raw ? '$' + parseInt(raw, 10).toLocaleString('es-CO') : '';
@@ -218,13 +249,138 @@ if (montoInput && plazoInput) {
   });
 
   plazoInput.addEventListener('input', calcular);
-  document.querySelectorAll('input[name="tipo"]').forEach(function(r) {
-    r.addEventListener('change', calcular);
-  });
+  tasaInput.addEventListener('input', calcular);
 
   montoInput.value = '$' + (50000000).toLocaleString('es-CO');
   calcular();
 }
+
+
+// Calculadora para préstamos con garantía hipotecaria
+var montoP = document.querySelector('#monto-p');
+var plazoP = document.querySelector('#plazo-p');
+var plazoValP = document.querySelector('#plazo-val-p');
+var tasaP = document.querySelector('#tasa-p');
+var tasaValP = document.querySelector('#tasa-val-p');
+var resultadoMensualP = document.querySelector('#resultado-mensual-p');
+var resultadoTotalP = document.querySelector('#resultado-total-p');
+var tasaMensualP = document.querySelector('#tasa-mensual-p');
+var ctaP = document.querySelector('#calc-cta-p');
+
+function parseMontoP() {
+  var raw = (montoP.value || '').replace(/\D/g, '');
+  return parseInt(raw, 10) || 0;
+}
+
+function calcularPrestamo() {
+  var monto = parseMontoP();
+  var plazo = parseInt(plazoP.value, 10);
+  var tasaPct = parseFloat(tasaP.value);
+  var cuota = monto > 0 ? Math.round(monto * tasaPct / 100) : 0;
+  var total = monto + cuota * plazo;
+
+  plazoValP.textContent = plazo;
+  tasaValP.textContent = tasaPct.toLocaleString('es-CO');
+  tasaMensualP.textContent = 'Tasa del ' + tasaPct.toLocaleString('es-CO') + '% mensual';
+  resultadoMensualP.textContent = formatter.format(cuota);
+  resultadoTotalP.textContent = formatter.format(total) + ' en total (' + plazo + ' meses)';
+
+  var mensaje = 'Hola, quiero información sobre un préstamo con garantía hipotecaria. Monto: ' + formatInput(montoP.value) +
+    ', plazo: ' + plazo + ' meses, tasa: ' + tasaPct.toLocaleString('es-CO') + '% mensual. Cuota mensual estimada: ' +
+    (monto > 0 ? formatter.format(cuota) : '$0') + '.';
+  ctaP.href = 'https://wa.me/573114662234?text=' + encodeURIComponent(mensaje);
+}
+
+if (montoP && plazoP && tasaP) {
+  montoP.addEventListener('input', function(e) {
+    var raw = (e.target.value || '').replace(/\D/g, '');
+    e.target.value = raw ? '$' + parseInt(raw, 10).toLocaleString('es-CO') : '';
+    calcularPrestamo();
+  });
+
+  plazoP.addEventListener('input', calcularPrestamo);
+  tasaP.addEventListener('input', calcularPrestamo);
+
+  montoP.value = '$' + (100000000).toLocaleString('es-CO');
+  calcularPrestamo();
+}
+
+// Alternar entre calculadora de inversión y de préstamo
+document.querySelectorAll('input[name="modo"]').forEach(function(radio) {
+  radio.addEventListener('change', function() {
+    var modo = document.querySelector('input[name="modo"]:checked').value;
+    var panelInversion = document.querySelector('#panel-inversion');
+    var panelPrestamo = document.querySelector('#panel-prestamo');
+    if (panelInversion) panelInversion.hidden = modo !== 'inversion';
+    if (panelPrestamo) panelPrestamo.hidden = modo !== 'prestamo';
+  });
+});
+
+
+// Carrusel del catálogo de proyectos
+document.addEventListener('DOMContentLoaded', function() {
+  var track = document.querySelector('#catalog-track');
+  if (!track) return;
+
+  var cards = track.querySelectorAll('.catalog-card');
+  var prevBtn = document.querySelector('.catalog-arrow-prev');
+  var nextBtn = document.querySelector('.catalog-arrow-next');
+  var dotsWrap = document.querySelector('#catalog-dots');
+
+  cards.forEach(function(card, i) {
+    var dot = document.createElement('button');
+    dot.type = 'button';
+    dot.className = 'catalog-dot';
+    dot.setAttribute('aria-label', 'Ir al proyecto ' + (i + 1));
+    dot.addEventListener('click', function() {
+      track.scrollTo({ left: card.offsetLeft, behavior: 'smooth' });
+    });
+    dotsWrap.appendChild(dot);
+  });
+  var dots = dotsWrap.querySelectorAll('.catalog-dot');
+
+  function cardStep() {
+    var style = getComputedStyle(track);
+    var gap = parseFloat(style.columnGap || style.gap) || 0;
+    return cards[0].getBoundingClientRect().width + gap;
+  }
+
+  function updateUI() {
+    var maxScroll = track.scrollWidth - track.clientWidth;
+    if (prevBtn) prevBtn.disabled = track.scrollLeft <= 4;
+    if (nextBtn) nextBtn.disabled = track.scrollLeft >= maxScroll - 4;
+
+    var closestIndex = 0;
+    var closestDist = Infinity;
+    cards.forEach(function(card, i) {
+      var dist = Math.abs(card.offsetLeft - track.scrollLeft);
+      if (dist < closestDist) {
+        closestDist = dist;
+        closestIndex = i;
+      }
+    });
+    dots.forEach(function(dot, i) {
+      dot.classList.toggle('active', i === closestIndex);
+    });
+  }
+
+  if (prevBtn) {
+    prevBtn.addEventListener('click', function() {
+      track.scrollBy({ left: -cardStep(), behavior: 'smooth' });
+    });
+  }
+  if (nextBtn) {
+    nextBtn.addEventListener('click', function() {
+      track.scrollBy({ left: cardStep(), behavior: 'smooth' });
+    });
+  }
+
+  track.addEventListener('scroll', function() {
+    window.requestAnimationFrame(updateUI);
+  });
+  window.addEventListener('resize', updateUI);
+  updateUI();
+});
 
 
 // Números placeholder: actualizar data-count con cifras reales del cliente
