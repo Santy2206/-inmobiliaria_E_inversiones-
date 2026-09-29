@@ -137,35 +137,42 @@ document.addEventListener('DOMContentLoaded', function() {
     if (digitosTelefono.length === 10) digitosTelefono = '57' + digitosTelefono;
     var whatsappLink = digitosTelefono ? 'https://wa.me/' + digitosTelefono : '';
 
-    var payload = {
-      name: nombre,
-      email: emailInput.value,
-      phone: phoneInput.value,
-      message: (messageInput.value || '').trim() || 'Sin mensaje',
-      'Nombre': nombre,
-      'Teléfono': phoneInput.value,
-      'Correo': emailInput.value,
-      'Servicio de interés': SERVICIOS[serviceInput.value] || serviceInput.value,
-      'Mensaje': (messageInput.value || '').trim() || 'Sin mensaje',
-      'Escribir por WhatsApp': whatsappLink,
-      _subject: 'Nuevo contacto de ' + nombre + ' - Inmobiliaria MADC',
-      _replyto: emailInput.value,
-      _captcha: 'false',
-      _template: 'table'
-    };
+    var servicio = SERVICIOS[serviceInput.value] || serviceInput.value;
+    var mensaje = (messageInput.value || '').trim() || 'Sin mensaje';
+    var correoCliente = (emailInput.value || '').trim();
+    var telefonoCliente = (phoneInput.value || '').trim();
+
+    var payload = new FormData();
+    payload.append('name', nombre);
+    payload.append('email', correoCliente);
+    payload.append('phone', telefonoCliente);
+    payload.append('message', mensaje);
+    payload.append('Nombre', nombre);
+    payload.append('Teléfono', telefonoCliente);
+    payload.append('Correo', correoCliente);
+    payload.append('Servicio de interés', servicio);
+    payload.append('Mensaje', mensaje);
+    if (whatsappLink) payload.append('Escribir por WhatsApp', whatsappLink);
+    payload.append('_subject', 'Nuevo contacto de ' + nombre + ' - Inmobiliaria MADC');
+    payload.append('_replyto', correoCliente);
+    payload.append('_captcha', 'false');
+    payload.append('_template', 'table');
+    payload.append('_honey', '');
 
     var controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
     var timeoutId = setTimeout(function() {
       if (controller) controller.abort();
-    }, 20000);
+    }, 15000);
 
-    fetch('https://formsubmit.co/ajax/inmobiliariamadc@gmail.com', {
+    // Destino de leads
+    var FORM_EMAIL = 'inmobiliariamadc@gmail.com';
+
+    fetch('https://formsubmit.co/ajax/' + FORM_EMAIL, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
         'Accept': 'application/json'
       },
-      body: JSON.stringify(payload),
+      body: payload,
       signal: controller ? controller.signal : undefined
     }).then(function(response) {
       return response.text().then(function(text) {
@@ -176,9 +183,8 @@ document.addEventListener('DOMContentLoaded', function() {
           data = { raw: text };
         }
         if (!response.ok) {
-          throw new Error((data && (data.message || data.error)) || 'bad response');
+          throw new Error((data && (data.message || data.error)) || ('HTTP ' + response.status));
         }
-        // FormSubmit sometimes returns success:"false" even with HTTP 200
         if (data && (data.success === 'false' || data.success === false)) {
           throw new Error(data.message || 'FormSubmit rejected the request');
         }
@@ -188,7 +194,23 @@ document.addEventListener('DOMContentLoaded', function() {
       form.reset();
       showSuccess();
     }).catch(function() {
-      showError('#error-submit', 'Hubo un problema al enviar. Intenta de nuevo o escríbenos por WhatsApp.');
+      var waMsg = 'Hola, quiero información.\n' +
+        'Nombre: ' + nombre + '\n' +
+        'Teléfono: ' + telefonoCliente + '\n' +
+        'Correo: ' + correoCliente + '\n' +
+        'Servicio: ' + servicio + '\n' +
+        'Mensaje: ' + mensaje;
+      var waUrl = 'https://wa.me/573114662234?text=' + encodeURIComponent(waMsg);
+      showError(
+        '#error-submit',
+        'No se pudo enviar al correo en este momento. '
+      );
+      var errorEl = document.querySelector('#error-submit');
+      if (errorEl) {
+        errorEl.innerHTML =
+          'No se pudo enviar al correo en este momento. ' +
+          '<a href="' + waUrl + '" target="_blank" rel="noreferrer">Enviar por WhatsApp</a>';
+      }
     }).finally(function() {
       clearTimeout(timeoutId);
       setSubmitting(false);
