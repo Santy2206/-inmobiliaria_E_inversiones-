@@ -141,6 +141,7 @@ document.addEventListener('DOMContentLoaded', function() {
       name: nombre,
       email: emailInput.value,
       phone: phoneInput.value,
+      message: (messageInput.value || '').trim() || 'Sin mensaje',
       'Nombre': nombre,
       'Teléfono': phoneInput.value,
       'Correo': emailInput.value,
@@ -153,26 +154,43 @@ document.addEventListener('DOMContentLoaded', function() {
       _template: 'table'
     };
 
-    fetch('https://formsubmit.co/ajax/soporte@inmobiliariamadc.com', {
+    var controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+    var timeoutId = setTimeout(function() {
+      if (controller) controller.abort();
+    }, 20000);
+
+    fetch('https://formsubmit.co/ajax/inmobiliariamadc@gmail.com', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
       },
-      body: JSON.stringify(payload)
+      body: JSON.stringify(payload),
+      signal: controller ? controller.signal : undefined
     }).then(function(response) {
-      return response.json().catch(function() {
-        return {};
-      }).then(function(data) {
+      return response.text().then(function(text) {
+        var data = {};
+        try {
+          data = text ? JSON.parse(text) : {};
+        } catch (err) {
+          data = { raw: text };
+        }
         if (!response.ok) {
           throw new Error((data && (data.message || data.error)) || 'bad response');
         }
-        form.reset();
-        showSuccess();
+        // FormSubmit sometimes returns success:"false" even with HTTP 200
+        if (data && (data.success === 'false' || data.success === false)) {
+          throw new Error(data.message || 'FormSubmit rejected the request');
+        }
+        return data;
       });
+    }).then(function() {
+      form.reset();
+      showSuccess();
     }).catch(function() {
       showError('#error-submit', 'Hubo un problema al enviar. Intenta de nuevo o escríbenos por WhatsApp.');
     }).finally(function() {
+      clearTimeout(timeoutId);
       setSubmitting(false);
     });
   });
